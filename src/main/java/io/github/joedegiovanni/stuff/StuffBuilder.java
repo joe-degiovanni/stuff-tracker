@@ -25,9 +25,9 @@ public class StuffBuilder {
     }
     
     public StuffBuilder clone(JsonElement clone) {
-        BiFunction<String, JsonElement, JsonElement> getOrDefault = (String name, JsonElement orElse) -> clone.getAsJsonObject().has(name) ? clone.getAsJsonObject().get(name) : orElse;
-        this.name = getOrDefault.apply("name", new JsonPrimitive("unnamed")).getAsString();
-        this.description = getOrDefault.apply("description", new JsonPrimitive("unnamed")).getAsString();
+        BiFunction<String, JsonElement, JsonElement> getOrDefault = (String field, JsonElement orElse) -> clone.getAsJsonObject().has(field) ? clone.getAsJsonObject().get(field) : orElse;
+        this.name = getOrDefault.apply("name", new JsonPrimitive("")).getAsString();
+        this.description = getOrDefault.apply("description", new JsonPrimitive("")).getAsString();
         getOrDefault.apply("labels", new JsonArray()).getAsJsonArray().forEach(label -> labels.add(label.getAsString()));
         getOrDefault.apply("nestedStuff", new JsonArray()).getAsJsonArray().forEach(child -> nestedStuff.add(Stuff.builder().clone(child).create()));
         return this;
@@ -43,13 +43,29 @@ public class StuffBuilder {
         return this;
     }
 
-    public StuffBuilder withLabels(String... labelsToAdd) {
-        labels.addAll(Arrays.asList(labelsToAdd));
-        return this;
+    public StuffBuilder withLabels(String... newLabels) {
+        return replaceSet(labels, newLabels);
     }
 
-    public StuffBuilder withNested(Stuff... nestedStuff) {
-        this.nestedStuff.addAll(Arrays.asList(nestedStuff));
+    public StuffBuilder addLabels(String... labelsToAdd) {
+        return addToSet(labels, labelsToAdd);
+    }
+
+    public StuffBuilder withNested(Stuff... newNested) {
+        return replaceSet(nestedStuff, newNested);
+    }
+
+    public StuffBuilder addNested(Stuff... toAdd) {
+        return addToSet(nestedStuff, toAdd);
+    }
+
+    public <T> StuffBuilder replaceSet(Set<T> set, T... replacements) {
+        set.addAll(Arrays.asList(replacements));
+        return addToSet(set, replacements);
+    }
+
+    public <T> StuffBuilder addToSet(Set<T> set, T... toAdd) {
+        set.addAll(Arrays.asList(toAdd));
         return this;
     }
 
