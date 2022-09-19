@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stuff Tracker</title>
+    <!-- CSS only -->
+    <link crossorigin="anonymous" href="bootstrap/bootstrap.min.css" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" rel="stylesheet">
+</head>
+<body>
+<main>
+    <header class="p-3 mb-3 border-bottom">
+        <div class="container">
+
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a class="nav-link px-2 link-secondary" href="#">Stuff</a></li>
+                    <li><a class="nav-link px-2 link-dark" href="#">Users</a></li>
+                </ul>
+
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                    <input aria-label="Search" class="form-control" id="search-box" onkeyup="loadStuff()" placeholder="Search...">
+                </form>
+            </div>
+
+        </div>
+    </header>
+    <div class="container">
+        <h1>Stuff Tracker</h1>
+        <div id="dynamic-stuff">
+
+        </div>
+    </div>
+</main>
+<script>
+
+    function loadStuff() {
+        document.getElementById("dynamic-stuff").innerText = "";
+
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function () {
+            createStuffListItem(JSON.parse(this.responseText), document.getElementById("dynamic-stuff"));
+        }
+        xhttp.open("GET", "/api/stuff", true);
+        xhttp.send();
+    }
+
+    function createStuffListItem(stuff, parentList) {
+        // display matching items
+        const listItem = document.createElement("li");
+        listItem.innerText = `${stuff.name} - ${stuff.description} ${stuff.labels}`;
+        parentList.append(listItem, createChildList(stuff.nestedStuff));
+    }
+
+    function createChildList(nestedStuff) {
+        const list = document.createElement("ul");
+        nestedStuff
+            .filter(stuff => matchesSearch(stuff))
+            .forEach(stuff => createStuffListItem(stuff, list));
+        return list;
+    }
+
+    function matchesSearch(stuff) {
+        const searchText = document.getElementById("search-box").value;
+        return JSON.stringify(stuff).toLowerCase().includes(searchText.toLowerCase());
+    }
+
+    loadStuff();
+</script>
+</body>
+</html>
