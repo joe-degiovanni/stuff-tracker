@@ -26,10 +26,8 @@ class StuffServiceTest {
         assertThat(stuff.matchesSearchText("waffle")).isFalse();
         
         var stuff2 = Stuff.builder()
-            .withName("name")
-            .withDescription("description")
+            .clone(stuff)
             .withLabels("WAFFLE!", "blah")
-            .withNested(stuff)
             .create();
         assertThat(stuff2.name()).isEqualTo("name");
         assertThat(stuff2.matchesSearchText("Desc")).isTrue();

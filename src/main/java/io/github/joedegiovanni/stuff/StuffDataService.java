@@ -16,7 +16,7 @@ import com.google.gson.JsonElement;
 
 public class StuffDataService {
 
-    public static final String DEFAULT_STUFF_FILE_NAME = "data/my-stuff.json";
+    public static final String DEFAULT_STUFF_FILE_NAME = "data/default-stuff.json";
     public static final String STUFF_FILE_NAME = "data/my-stuff.json";
 
     public final Gson gson = new GsonBuilder().setPrettyPrinting().create();
