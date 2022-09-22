@@ -41,6 +41,10 @@ function saveStuff() {
 function createStuffListItem(stuff, parentList) {
     // display matching items
     const listItem = document.createElement("li");
+    if (stuff.id === undefined) {
+        stuff.id = crypto.randomUUID();
+    }
+    listItem.setAttribute("id", stuff.id);
     listItem.setAttribute("class", "list-group-item");
     listItem.appendChild(createEditableText(stuff));
     listItem.appendChild(createSpanSpace());
@@ -55,8 +59,32 @@ function createEditableText(stuff) {
     const editableSpan = document.createElement("span");
     editableSpan.innerText = toString(stuff);
     editableSpan.setAttribute("onclick", "console.log('clicked ' + this.innerText); this.contentEditable = true;");
+    editableSpan.setAttribute("onkeypress", "keyPressed(event, this)");
     editableSpan.setAttribute("onfocusout", "this.contentEditable = false;");
     return editableSpan;
+}
+
+function keyPressed(event, element) {
+    if (event.key === "Enter") {
+        const id = element.parentElement.id;
+        const matchStuff = findById(allStuff, id);
+        matchStuff.name = element.innerText;
+        element.setAttribute("contentEditable", false);
+        saveStuff();
+    }
+}
+
+function findById(stuff, id) {
+    if (stuff.id === id) {
+        return stuff;
+    }
+    for (let i = 0; i < stuff.nestedStuff.length; i++) {
+        let test = findById(stuff.nestedStuff[i], id);
+        if (test != null) {
+            return test;
+        }
+    }
+    return null;
 }
 
 function toString(stuff) {
@@ -90,17 +118,33 @@ function createTrashButton() {
     const button = document.createElement("i");
     button.setAttribute("class", "bi bi-trash");
     button.innerHTML = trashIcon;
-    button.setAttribute("onclick", "console.log('delete me sometime')");
+    button.setAttribute("onclick", "deleteItem(this.parentElement)");
     return button;
 }
 
 function addRowBelow(element) {
-    let arr = Array.from(element.childNodes).filter(it => it.tagName === "UL");
-    if (arr.length > 0) {
-        console.log(allStuff);
-        allStuff.nestedStuff.push({name: "new item", nestedStuff: []});
-        saveStuff();
+    let stuff = findById(allStuff, element.id);
+    if (stuff.nestedStuff === undefined) {
+        stuff.nestedStuff = [];
     }
+    stuff.nestedStuff.push({name: "new item", nestedStuff: []});
+    saveStuff();
+}
+
+function deleteItem(element) {
+    let stuff = findById(allStuff, element.id);
+    stuff.deleted = true;
+    element.remove();
+    deleteStuff(allStuff);
+
+    saveStuff();
+}
+
+function deleteStuff(stuff) {
+    for (let i = 0; i < stuff.nestedStuff.length; i++) {
+        deleteStuff(stuff.nestedStuff[i]);
+    }
+    stuff.nestedStuff = stuff.nestedStuff.filter(it => !it.deleted)
 }
 
 function createSpanSpace() {
