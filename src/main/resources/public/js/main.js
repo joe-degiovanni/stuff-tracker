@@ -55,7 +55,17 @@ function createPlusButton() {
     const button = document.createElement("i");
     button.setAttribute("class", "bi bi-plus-circle");
     button.innerHTML = plusSign;
+    button.setAttribute("onclick", "addRowBelow(this.parentElement)");
     return button;
+}
+
+function addRowBelow(element) {
+    let arr = Array.from(element.childNodes).filter(it => it.tagName === "UL");
+    if (arr.length > 0) {
+        console.log(allStuff);
+        allStuff.nestedStuff.push({name: "new item", nestedStuff: []})
+        loadStuff();
+    }
 }
 
 function createSpanSpace() {
