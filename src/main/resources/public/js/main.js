@@ -42,13 +42,21 @@ function createStuffListItem(stuff, parentList) {
     // display matching items
     const listItem = document.createElement("li");
     listItem.setAttribute("class", "list-group-item");
-    listItem.innerText = toString(stuff);
+    listItem.appendChild(createEditableText(stuff));
     listItem.appendChild(createSpanSpace());
     listItem.appendChild(createPlusButton());
     listItem.appendChild(createSpanSpace());
     listItem.appendChild(createTrashButton());
     listItem.appendChild(createChildList(stuff.nestedStuff));
     parentList.append(listItem);
+}
+
+function createEditableText(stuff) {
+    const editableSpan = document.createElement("span");
+    editableSpan.innerText = toString(stuff);
+    editableSpan.setAttribute("onclick", "console.log('clicked ' + this.innerText); this.contentEditable = true;");
+    editableSpan.setAttribute("onfocusout", "this.contentEditable = false;");
+    return editableSpan;
 }
 
 function toString(stuff) {
