@@ -30,7 +30,7 @@ public class StuffDataService {
             String json = new String(inputStream.readAllBytes());
             return gson.fromJson(json, JsonElement.class);
         } catch (IOException e) {
-            throw new IllegalStateException("Unable to load stuff", e);
+            throw new IllegalStateException("Unable to load stuff from "+getStuffResourceUrl(), e);
         }
     }
 

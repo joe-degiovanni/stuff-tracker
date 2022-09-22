@@ -47,8 +47,13 @@
     function createStuffListItem(stuff, parentList) {
         // display matching items
         const listItem = document.createElement("li");
-        listItem.innerText = `${stuff.name} - ${stuff.description} ${stuff.labels}`;
+        listItem.innerText = toString(stuff);
         parentList.append(listItem, createChildList(stuff.nestedStuff));
+    }
+
+    function toString(stuff) {
+        const orEmptyString = obj => obj === undefined ? "" : obj;
+        return `${stuff.name} - ${orEmptyString(stuff.description)} ${orEmptyString(stuff.labels)}`;
     }
 
     function createChildList(nestedStuff) {

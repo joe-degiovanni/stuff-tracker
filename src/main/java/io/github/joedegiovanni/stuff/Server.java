@@ -3,12 +3,7 @@ package io.github.joedegiovanni.stuff;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static spark.Spark.delete;
-import static spark.Spark.get;
-import static spark.Spark.path;
-import static spark.Spark.post;
-import static spark.Spark.put;
-import static spark.Spark.staticFiles;
+import static spark.Spark.*;
 
 public class Server {
 
@@ -27,15 +22,16 @@ public class Server {
         staticFiles.location("/public");
 
         path("/api", () -> {
+            before("/*", (req, res) -> res.header("Content-Type", "application/json"));
             path("/stuff", () -> {
                 get("", (req, res) -> service.readJson());
                 get("/find", (req, res) -> service.readJson());
             });
             path("/users", () -> {
-                get("", ((request, response) -> "todo"));
-                post("", ((request, response) -> "todo"));
-                put("", ((request, response) -> "todo"));
-                delete("", ((request, response) -> "todo"));
+                get("", (req, res) -> "{}");
+                post("", (req, res) -> "{}");
+                put("", (req, res) -> "{}");
+                delete("", (req, res) -> "{}");
             });
         });
 
