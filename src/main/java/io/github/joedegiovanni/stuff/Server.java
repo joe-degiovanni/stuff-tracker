@@ -1,13 +1,20 @@
 package io.github.joedegiovanni.stuff;
 
+import java.io.File;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-
-import static spark.Spark.*;
+import static spark.Spark.before;
+import static spark.Spark.delete;
+import static spark.Spark.get;
+import static spark.Spark.path;
+import static spark.Spark.post;
+import static spark.Spark.put;
+import static spark.Spark.staticFiles;
 
 public class Server {
+
     private final Logger log = LoggerFactory.getLogger(Server.class);
     private final StuffDataService service = new StuffDataService();
 
@@ -26,7 +33,7 @@ public class Server {
             before("/*", (req, res) -> res.header("Content-Type", "application/json"));
             path("/stuff", () -> {
                 get("", (req, res) -> service.readJson());
-                get("/find", (req, res) -> service.readJson());
+                post("", (req, res) -> service.saveJson(req.body()));
             });
             path("/users", () -> {
                 get("", (req, res) -> "{}");

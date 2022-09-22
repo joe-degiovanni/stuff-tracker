@@ -62,7 +62,7 @@ class StuffServiceTest {
             .withDescription("updated")
             .create();
         
-        service.saveJson(stuff);
+        service.saveJson(new JsonObject());
         assertThat(service.readJson()).isEqualTo(service.gson.fromJson("""
             {
               "name":"The Farm",

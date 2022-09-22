@@ -13,6 +13,7 @@ import java.nio.file.StandardCopyOption;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class StuffDataService {
 
@@ -24,20 +25,25 @@ public class StuffDataService {
     public void resetToDefaultStuff() throws IOException {
         Files.copy(Path.of(DEFAULT_STUFF_FILE_NAME), Path.of(STUFF_FILE_NAME), StandardCopyOption.REPLACE_EXISTING);
     }
-    
+
     public JsonElement readJson() {
         try (final var inputStream = getStuffResourceUrl().openStream()) {
             String json = new String(inputStream.readAllBytes());
             return gson.fromJson(json, JsonElement.class);
         } catch (IOException e) {
-            throw new IllegalStateException("Unable to load stuff from "+getStuffResourceUrl(), e);
+            throw new IllegalStateException("Unable to load stuff from " + getStuffResourceUrl(), e);
         }
     }
 
-    public void saveJson(Stuff object) throws FileNotFoundException {
+    public boolean saveJson(String object) throws FileNotFoundException {
+        return saveJson(gson.fromJson(object, JsonObject.class));
+    }
+
+    public boolean saveJson(JsonObject object) throws FileNotFoundException {
         try (final var printWriter = new PrintWriter(getStuffResourceUrl().getPath())) {
             printWriter.print(gson.toJson(object));
             printWriter.flush();
+            return true;
         }
     }
 

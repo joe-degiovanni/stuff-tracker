@@ -5,6 +5,11 @@ const plusSign = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=
     "  <path d=\"M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z\"/>\n" +
     "</svg>";
 
+function reloadStuff() {
+    allStuff = undefined;
+    loadStuff();
+}
+
 function loadStuff() {
     document.getElementById("dynamic-stuff").innerText = "";
 
@@ -19,6 +24,13 @@ function loadStuff() {
     } else {
         createStuffListItem(allStuff, document.getElementById("dynamic-stuff"));
     }
+}
+
+function saveStuff() {
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/api/stuff", false);
+    xhttp.send(JSON.stringify(allStuff));
+    reloadStuff();
 }
 
 function createStuffListItem(stuff, parentList) {
@@ -63,8 +75,8 @@ function addRowBelow(element) {
     let arr = Array.from(element.childNodes).filter(it => it.tagName === "UL");
     if (arr.length > 0) {
         console.log(allStuff);
-        allStuff.nestedStuff.push({name: "new item", nestedStuff: []})
-        loadStuff();
+        allStuff.nestedStuff.push({name: "new item", nestedStuff: []});
+        saveStuff();
     }
 }
 
