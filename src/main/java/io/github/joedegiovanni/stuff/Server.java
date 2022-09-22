@@ -3,10 +3,11 @@ package io.github.joedegiovanni.stuff;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+
 import static spark.Spark.*;
 
 public class Server {
-
     private final Logger log = LoggerFactory.getLogger(Server.class);
     private final StuffDataService service = new StuffDataService();
 
@@ -19,7 +20,7 @@ public class Server {
         log.info("http://localhost:4567/api/stuff");
         log.info("http://localhost:4567/api/users");
 
-        staticFiles.location("/public");
+        staticFiles.externalLocation(new File("src/main/resources/public").getAbsolutePath());
 
         path("/api", () -> {
             before("/*", (req, res) -> res.header("Content-Type", "application/json"));
