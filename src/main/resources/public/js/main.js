@@ -12,8 +12,10 @@ function loadStuff() {
 function createStuffListItem(stuff, parentList) {
     // display matching items
     const listItem = document.createElement("li");
-    listItem.innerText = toString(stuff);
-    parentList.append(listItem, createChildList(stuff.nestedStuff));
+    listItem.setAttribute("class", "list-group-item");
+    listItem.innerText = toString(stuff)
+    listItem.appendChild(createChildList(stuff.nestedStuff));
+    parentList.append(listItem);
 }
 
 function toString(stuff) {
@@ -23,6 +25,7 @@ function toString(stuff) {
 
 function createChildList(nestedStuff) {
     const list = document.createElement("ul");
+    list.setAttribute("class", "list-group list-group-flush");
     nestedStuff
         .filter(stuff => matchesSearch(stuff))
         .forEach(stuff => createStuffListItem(stuff, list));
