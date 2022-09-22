@@ -1,12 +1,19 @@
+let allStuff;
+
 function loadStuff() {
     document.getElementById("dynamic-stuff").innerText = "";
 
-    const xhttp = new XMLHttpRequest();
-    xhttp.onload = function () {
-        createStuffListItem(JSON.parse(this.responseText), document.getElementById("dynamic-stuff"));
+    if (allStuff === undefined) {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function () {
+            allStuff = JSON.parse(this.responseText);
+            createStuffListItem(allStuff, document.getElementById("dynamic-stuff"));
+        }
+        xhttp.open("GET", "/api/stuff", true);
+        xhttp.send();
+    } else {
+        createStuffListItem(allStuff, document.getElementById("dynamic-stuff"));
     }
-    xhttp.open("GET", "/api/stuff", true);
-    xhttp.send();
 }
 
 function createStuffListItem(stuff, parentList) {
