@@ -31,7 +31,7 @@ public class StuffDataService {
     public StuffDataService() {
         try {
             storage = StorageOptions.newBuilder()
-                .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream("C:/Users/joede/dl/stuff-tracker-365120-112b75ed3297.json")))
+                .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream(System.getenv("STUFF_TRACKER_CREDENTIAL_FILE"))))
                 .build()
                 .getService();
         } catch (Exception e) {
