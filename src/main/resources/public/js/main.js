@@ -10,12 +10,12 @@ const trashIcon = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height
     "  <path fill-rule=\"evenodd\" d=\"M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z\"/>\n" +
     "</svg>";
 
-function reloadStuff() {
+async function reloadStuff() {
     allStuff = undefined;
     loadStuff();
 }
 
-function loadStuff() {
+async function loadStuff() {
     document.getElementById("dynamic-stuff").innerText = "";
 
     if (allStuff === undefined) {
@@ -31,11 +31,11 @@ function loadStuff() {
     }
 }
 
-function saveStuff() {
+async function saveStuff() {
     const xhttp = new XMLHttpRequest();
+    xhttp.onload = () => reloadStuff();
     xhttp.open("POST", "/api/stuff", false);
     xhttp.send(JSON.stringify(allStuff));
-    reloadStuff();
 }
 
 function createStuffListItem(stuff, parentList) {
