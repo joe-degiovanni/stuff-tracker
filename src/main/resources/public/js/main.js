@@ -42,11 +42,7 @@ function createStuffListItem(stuff, parentList) {
     // display matching items
     const listItem = document.createElement("li");
     if (stuff.id === undefined) {
-        try {
-            stuff.id = crypto.randomUUID();
-        } catch (e) {
-            console.log("unable to generate UUID");
-        }
+        stuff.id = crypto.randomUUID();
     }
     listItem.setAttribute("id", stuff.id);
     listItem.setAttribute("class", "list-group-item");
@@ -64,18 +60,22 @@ function createEditableText(stuff) {
     editableSpan.innerText = toString(stuff);
     editableSpan.setAttribute("onclick", "console.log('clicked ' + this.innerText); this.contentEditable = true;");
     editableSpan.setAttribute("onkeypress", "keyPressed(event, this)");
-    editableSpan.setAttribute("onfocusout", "this.contentEditable = false;");
+    editableSpan.setAttribute("onfocusout", "this.contentEditable = false;saveItem(this);");
     return editableSpan;
 }
 
 function keyPressed(event, element) {
     if (event.key === "Enter") {
-        const id = element.parentElement.id;
-        const matchStuff = findById(allStuff, id);
-        matchStuff.name = element.innerText;
-        element.setAttribute("contentEditable", false);
-        saveStuff();
+        saveItem(element);
     }
+}
+
+function saveItem(element) {
+    const id = element.parentElement.id;
+    const matchStuff = findById(allStuff, id);
+    matchStuff.name = element.innerText;
+    element.setAttribute("contentEditable", false);
+    saveStuff();
 }
 
 function findById(stuff, id) {
