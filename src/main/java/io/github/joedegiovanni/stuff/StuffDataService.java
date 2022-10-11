@@ -1,7 +1,9 @@
 package io.github.joedegiovanni.stuff;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 import java.nio.file.Files;
@@ -30,8 +32,12 @@ public class StuffDataService {
 
     public StuffDataService() {
         try {
+            String cred = System.getenv("STUFF_TRACKER_CREDENTIAL");
+            InputStream credStream = cred != null ?
+                    new ByteArrayInputStream(cred.getBytes(UTF_8)) :
+                    new FileInputStream(System.getenv("STUFF_TRACKER_CREDENTIAL_FILE"));
             storage = StorageOptions.newBuilder()
-                .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream(System.getenv("STUFF_TRACKER_CREDENTIAL_FILE"))))
+                .setCredentials(ServiceAccountCredentials.fromStream(credStream))
                 .build()
                 .getService();
         } catch (Exception e) {
