@@ -22,7 +22,7 @@ public class LocalStuffDataService implements IStuffDataService {
     public final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public void resetToDefaultStuff() {
-        Sneaky.wrap(() -> Files.copy(Path.of(DEFAULT_STUFF_FILE_NAME), Path.of(STUFF_FILE_NAME), StandardCopyOption.REPLACE_EXISTING));
+        wrap(() -> Files.copy(Path.of(DEFAULT_STUFF_FILE_NAME), Path.of(STUFF_FILE_NAME), StandardCopyOption.REPLACE_EXISTING));
     }
 
     public JsonElement readJson() {
@@ -39,7 +39,7 @@ public class LocalStuffDataService implements IStuffDataService {
     }
 
     public boolean saveJson(JsonObject object) {
-        try (final var printWriter = Sneaky.wrap(() -> new PrintWriter(getStuffResourceUrl().getPath())).get()) {
+        try (final var printWriter = wrap(() -> new PrintWriter(getStuffResourceUrl().getPath())).get()) {
             printWriter.print(gson.toJson(object));
             printWriter.flush();
             return true;

@@ -10,16 +10,20 @@ public interface Sneaky {
         return (T) t;
     }
 
-    static <T> Supplier<T> wrap(ThrowingSupplier<T> thing) {
-        return thing.wrap();
+    static Runnable wrap(ThrowingRunnable runnable) {
+        return runnable.wrap();
     }
 
-    static <T> Consumer<T> wrap(ThrowingConsumer<T> thing) {
-        return thing.wrap();
+    static <T> Supplier<T> wrap(ThrowingSupplier<T> supplier) {
+        return supplier.wrap();
     }
 
-    static <T, R> Function<T, R> wrap(ThrowingFunction<T, R> thing) {
-        return thing.wrap();
+    static <T> Consumer<T> wrap(ThrowingConsumer<T> consumer) {
+        return consumer.wrap();
+    }
+
+    static <T, R> Function<T, R> wrap(ThrowingFunction<T, R> function) {
+        return function.wrap();
     }
 
     interface WrapCheckedException<T> {
