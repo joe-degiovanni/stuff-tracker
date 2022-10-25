@@ -36,7 +36,7 @@ public interface Sneaky {
         default Runnable wrap() {
             return () -> {
                 try {
-                    this.run();
+                    run();
                 } catch (Exception e) {
                     throw Sneaky.wrap(e);
                 }
