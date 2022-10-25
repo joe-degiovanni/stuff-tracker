@@ -1,8 +1,5 @@
 package io.github.joedegiovanni.stuff;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import com.google.gson.JsonObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,11 +7,11 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class StuffServiceTest {
-    StuffDataService service;
+    IStuffDataService service;
 
     @BeforeEach
-    void setUp() throws IOException {
-        service = new StuffDataService();
+    void setUp() {
+        service = new LocalStuffDataService();
         service.resetToDefaultStuff();
     }
     
@@ -35,7 +32,7 @@ class StuffServiceTest {
     }
     
     @Test 
-    void loadAndSave() throws FileNotFoundException {
+    void loadAndSave() {
         assertThat(service.readJson()).isEqualTo(service.gson.fromJson("""
             {
               "name":"The Farm",

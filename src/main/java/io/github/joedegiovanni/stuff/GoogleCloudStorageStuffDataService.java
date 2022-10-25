@@ -2,7 +2,6 @@ package io.github.joedegiovanni.stuff;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
@@ -19,9 +18,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import static io.github.joedegiovanni.stuff.Sneaky.unchecked;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-public class StuffDataService {
+public class GoogleCloudStorageStuffDataService implements IStuffDataService {
 
     public static final String DEFAULT_STUFF_FILE_NAME = "data/default-stuff.json";
     public static final String STUFF_FILE_NAME = "data/my-stuff.json";
@@ -30,7 +30,7 @@ public class StuffDataService {
     public final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     public final Storage storage;
 
-    public StuffDataService() {
+    public GoogleCloudStorageStuffDataService() {
         try {
             String cred = System.getenv("STUFF_TRACKER_CREDENTIAL");
             InputStream credStream = cred != null ?
@@ -45,8 +45,8 @@ public class StuffDataService {
         }
     }
 
-    public void resetToDefaultStuff() throws IOException {
-        Files.copy(Path.of(DEFAULT_STUFF_FILE_NAME), Path.of(STUFF_FILE_NAME), StandardCopyOption.REPLACE_EXISTING);
+    public void resetToDefaultStuff() {
+        unchecked(() -> Files.copy(Path.of(DEFAULT_STUFF_FILE_NAME), Path.of(STUFF_FILE_NAME), StandardCopyOption.REPLACE_EXISTING));
     }
 
     public JsonElement readJson() {

@@ -1,0 +1,44 @@
+#!/usr/bin/java --source 11
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        var answer = (int) (Math.random() * 100);
+        say("Guess a number between 0 and 99");
+
+        var guess = getGuess();
+        var count = 1;
+        var maxGuesses = 5;
+        while (guess != answer && count < maxGuesses) {
+            if (answer < guess) {
+                say("lower than " + guess);
+            } else {
+                say("higher than " + guess);
+            }
+            guess = getGuess();
+            count++;
+        }
+
+        if (answer == guess) {
+            say("Correct! the answer is " + answer + ". You got the answer in " + count + " guesses!");
+        } else {
+            say("Game over. You took too many guesses, loser.");
+        }
+    }
+
+    public static int getGuess() {
+        return Integer.parseInt(new Scanner(System.in).nextLine());
+    }
+
+    public static void say(String words) {
+
+        try {
+            var runtime = Runtime.getRuntime();
+            runtime.exec(new String[]{"espeak", words});
+            Thread.sleep(2500);
+        } catch (Exception e) {
+
+        }
+    }
+}

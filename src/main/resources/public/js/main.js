@@ -34,7 +34,7 @@ function loadStuff() {
 function saveStuff() {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = () => reloadStuff();
-    xhttp.open("POST", "/api/stuff", false);
+    xhttp.open("POST", "/api/stuff", true);
     xhttp.send(JSON.stringify(allStuff));
 }
 

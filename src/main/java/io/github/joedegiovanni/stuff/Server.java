@@ -16,7 +16,7 @@ import static spark.Spark.staticFiles;
 public class Server {
 
     private final Logger log = LoggerFactory.getLogger(Server.class);
-    private final StuffDataService service = new StuffDataService();
+    private final IStuffDataService service = new LocalStuffDataService();
 
     public static void main(String[] args) {
         new Server().start();
