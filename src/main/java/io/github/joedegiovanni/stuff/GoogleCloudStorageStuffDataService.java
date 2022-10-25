@@ -18,7 +18,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import static io.github.joedegiovanni.stuff.Sneaky.unchecked;
+import static io.github.joedegiovanni.stuff.Sneaky.wrap;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class GoogleCloudStorageStuffDataService implements IStuffDataService {
@@ -46,7 +46,7 @@ public class GoogleCloudStorageStuffDataService implements IStuffDataService {
     }
 
     public void resetToDefaultStuff() {
-        unchecked(() -> Files.copy(Path.of(DEFAULT_STUFF_FILE_NAME), Path.of(STUFF_FILE_NAME), StandardCopyOption.REPLACE_EXISTING));
+        Sneaky.wrap(() -> Files.copy(Path.of(DEFAULT_STUFF_FILE_NAME), Path.of(STUFF_FILE_NAME), StandardCopyOption.REPLACE_EXISTING));
     }
 
     public JsonElement readJson() {

@@ -5,9 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.io.IOException;
-
-import static io.github.joedegiovanni.stuff.Sneaky.unchecked;
+import static io.github.joedegiovanni.stuff.Sneaky.wrap;
 
 public interface IStuffDataService {
 

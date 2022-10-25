@@ -12,7 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-import static io.github.joedegiovanni.stuff.Sneaky.unchecked;
+import static io.github.joedegiovanni.stuff.Sneaky.wrap;
 
 public class LocalStuffDataService implements IStuffDataService {
 
@@ -22,7 +22,7 @@ public class LocalStuffDataService implements IStuffDataService {
     public final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public void resetToDefaultStuff() {
-        unchecked(() -> Files.copy(Path.of(DEFAULT_STUFF_FILE_NAME), Path.of(STUFF_FILE_NAME), StandardCopyOption.REPLACE_EXISTING));
+        Sneaky.wrap(() -> Files.copy(Path.of(DEFAULT_STUFF_FILE_NAME), Path.of(STUFF_FILE_NAME), StandardCopyOption.REPLACE_EXISTING));
     }
 
     public JsonElement readJson() {
@@ -30,7 +30,7 @@ public class LocalStuffDataService implements IStuffDataService {
             String json = new String(inputStream.readAllBytes());
             return gson.fromJson(json, JsonElement.class);
         } catch (IOException e) {
-            throw unchecked(e);
+            throw Sneaky.wrap(e);
         }
     }
 
@@ -39,7 +39,7 @@ public class LocalStuffDataService implements IStuffDataService {
     }
 
     public boolean saveJson(JsonObject object) {
-        try (final var printWriter = unchecked(() -> new PrintWriter(getStuffResourceUrl().getPath())).get()) {
+        try (final var printWriter = Sneaky.wrap(() -> new PrintWriter(getStuffResourceUrl().getPath())).get()) {
             printWriter.print(gson.toJson(object));
             printWriter.flush();
             return true;

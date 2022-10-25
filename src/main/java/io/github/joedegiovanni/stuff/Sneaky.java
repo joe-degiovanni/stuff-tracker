@@ -6,19 +6,19 @@ import java.util.function.Supplier;
 
 public interface Sneaky {
 
-    static <T extends Exception> T unchecked(Exception t) throws T {
+    static <T extends Exception> T wrap(Exception t) throws T {
         return (T) t;
     }
 
-    static <T> Supplier<T> unchecked(ThrowingSupplier<T> thing) {
+    static <T> Supplier<T> wrap(ThrowingSupplier<T> thing) {
         return thing.wrap();
     }
 
-    static <T> Consumer<T> unchecked(ThrowingConsumer<T> thing) {
+    static <T> Consumer<T> wrap(ThrowingConsumer<T> thing) {
         return thing.wrap();
     }
 
-    static <T, R> Function<T, R> unchecked(ThrowingFunction<T, R> thing) {
+    static <T, R> Function<T, R> wrap(ThrowingFunction<T, R> thing) {
         return thing.wrap();
     }
 
@@ -34,7 +34,7 @@ public interface Sneaky {
                 try {
                     this.run();
                 } catch (Exception e) {
-                    throw unchecked(e);
+                    throw Sneaky.wrap(e);
                 }
             };
         }
@@ -48,7 +48,7 @@ public interface Sneaky {
                 try {
                     return apply(input);
                 } catch (Exception e) {
-                    throw unchecked(e);
+                    throw Sneaky.wrap(e);
                 }
             };
         }
@@ -62,7 +62,7 @@ public interface Sneaky {
                 try {
                     return get();
                 } catch (Exception e) {
-                    throw unchecked(e);
+                    throw Sneaky.wrap(e);
                 }
             };
         }
@@ -77,7 +77,7 @@ public interface Sneaky {
                 try {
                     accept(input);
                 } catch (Exception e) {
-                    throw unchecked(e);
+                    throw Sneaky.wrap(e);
                 }
             };
         }
